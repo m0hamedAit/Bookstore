@@ -1,0 +1,137 @@
+{% extends 'base.html.twig'  %}
+{% block title %}Books
+{% endblock %}
+{% block pageName %}Books
+{% endblock %}
+
+{%  block body %}
+
+{% set value = 10 %}
+
+	<div class="page-bottom">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8 col-md-12 col-sm-12">
+					<div class="blog-list">
+						<div class="row">
+							{% for book in books %}
+								{% set r = random(['1073','119','180','20','24','464','528']) %}
+								<div class="col-lg-6 col-md-6 col-sm-12">
+									<div class="blog-post-thumb">
+										<div class="img">
+											<img src={{"https://picsum.photos/id/%s/200/300" | format(r)}}>
+											<div class="date">
+												<span>{{ book.note }}/20</span>
+											</div>
+										</div>
+										<div class="blog-content">
+											<ul class="post-meta">
+												<li>
+													<a href="#" class="inactiveLink">
+														<span class="icon fa fa-user"></span>by
+														{% for auteur in book.getAuteurs %}
+															{{ auteur.getNomPrenom }}
+															|
+														{% endfor %}
+													</a>
+												</li>
+											</ul>
+											<h3>
+												<a href="#" class="inactiveLink">{{ book.title }}</a>
+											</h3>
+											<div class="text">
+												Quisque euismod nec lacus sit amet maximus. Ut convallis sagittis lorem auctor malesuada. Morbi auctor.
+											</div>
+											<a href={{asset('book/%s' | format(book.id))}} class="btn-primary-line">See Details</a>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+					{{ knp_pagination_render(books, '@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig') }}
+				</div>
+
+				<div class="col-lg-4 col-md-12 col-sm-12">
+					<aside class="default-aside">
+						<div class="sidebar">
+							<div class="search-widget">
+								<div class="search">
+								
+									{{ form_start(form) }}
+										{{ form_row(form.keyword) }}
+										<button >
+											<i class="fa fa-search"></i>
+										</button>
+									
+									{{ form_end(form) }}
+								</div>
+							</div>
+							<ul>
+								{% for auteur in auteurs %}
+									<li>
+										<a href={{ asset('books/a%s') | format( auteur.id)}}>{{auteur.getNomPrenom()}}<span>{{ auteur.livres|length }}</span>
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+							<div class="widget-tags">
+								<label>Search by mark</label>
+								<span type="text" id="textInput" class="rangeValue" style="margin-left: 40px; color: #120C2D; border-radius: 20px; width: 60px; text-align: center;border-radius: 10px; width: 100px; margin-left: 200px;">10</span>
+								<input id="rangePicker" type="range" data-handle="custom" value="10" min="0" max="20" class="custom-range" style="width: 80%;" onchange="updateTextInput(this.value);">
+								<a href="#" id="searchMark" style="float:right;" onclick="searchByMark();">Search</a>
+
+							</div>
+							<br>
+
+							<div class="widget-tags">
+								<label>Search by Date</label>
+								{{ form_start(form2) }}
+									<div class="row form-group">
+										{{ form_row(form2.dateFrom) }}
+									</div>
+								
+									<div class="row form-group">
+										{{ form_row(form2.dateTo) }}
+									</div>
+									<button style="background: none; color: inherit; border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit; float:right;"><a >Search</a></button>
+								{{ form_end(form2) }}
+								
+							</div>
+							<br>
+							<div class="widget-tags">
+								{% for genre in genres %}
+									<a href={{ asset('books/g%s') | format( genre.id)}}>{{ genre.nom }}</a>
+								{% endfor %}
+							</div>
+						</div>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+	<script>
+
+		function updateTextInput(val) {
+      document.getElementById('textInput').innerHTML = val;
+    }
+
+		$(function () {
+			$('.js-datepicker').datepicker();
+		});
+
+		function searchByMark(val) {
+			var value = document.getElementById("rangePicker").value;
+			var url = '{{ path("marks", {'id': 'mark'}) }}'; 
+			url = url.replace("mark", value);
+
+			document.getElementById("searchMark").href = url
+		}
+	</script>
+{% endblock %}

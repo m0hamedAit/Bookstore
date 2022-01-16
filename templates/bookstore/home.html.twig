@@ -1,0 +1,51 @@
+{% extends 'base.html.twig'  %}
+{% block title %}Home{% endblock %}
+{% block pageName %}Home{% endblock %}
+
+{%  block body %}
+  <div class="page-bottom">
+		<div class="container">
+			<div class="row">
+
+      {% set f = 'https://picsum.photos/' %}
+      {% set l = '/800/534?random=' %}
+
+        {% for book in books %}
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+						<a href="" class="services-post inactiveLink ">
+							<div class="img">
+								<img src={{ "%s%s%s" | format(f, l, book.id)}} alt="">
+							</div>
+							<div class="post-content">
+								<h3>{{ book.title }}</h3>
+								<div class="text">
+                    Authors :
+                      {% for author in book.auteurs %}
+                        <span class="badge rounded-pil bg-light text-dar">{{ author.getNomPrenom() }}</span>
+                      {% endfor %}
+                    <br>
+                  Genres : 
+                      {% for genre in book.genres %}
+                        <span class="badge rounded-pil bg-light text-dar" style="border: black;">{{ genre.nom }}</span>
+                      {% endfor %}
+                      <br>
+                      <span style="float:right;"> <img src={{ asset("assets/images/star.png")}}  style="width:20px; margin-bottom:5px"> {{ book.note }}</span>
+                      
+                    
+								</div>
+							</div>
+						</a>
+					</div>
+        {% endfor %}
+      </div>
+      {% if not app.user %}
+      <a class="btn btn-outline-dark px-5 customButton" href={{ asset("login")}}>See More</a>
+      {% else %}
+      <a class="btn btn-outline-dark px-5 customButton" href={{ asset("books")}}>See More</a>
+      {% endif %}
+    </div>
+    
+  </div>
+
+{% endblock %}

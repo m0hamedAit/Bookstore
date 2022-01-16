@@ -1,0 +1,38 @@
+{% extends 'base.html.twig'  %}
+{% block title %}Authors{% endblock %}
+{% block pageName %}Authors{% endblock %}
+
+{%  block body %}
+  <div class="page-bottom">
+		<div class="container">
+			<div class="row">
+
+        {% for auteur in auteurs %}
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+						<a href={{ asset('author/%s') | format( auteur.id)}} class="services-post">
+							<div class="img">
+									{% if auteur.sexe == 'M' %}
+										<img src="https://picsum.photos/id/349/556/370" class="img-fluid" alt="">
+                  {% else %}
+                    <img src="https://picsum.photos/id/399/556/370" class="img-fluid" alt="">
+                  {% endif %}
+							</div>
+							<div class="post-content">
+								<h3>{{ auteur.getNomPrenom }}</h3>
+								<div class="text">
+                    <bold>BirthDay :</bold> {{ auteur.getDateDeNaissanceStr }} <br>
+                  <bold>Nationality :</bold> {{ auteur.nationalite }}
+                       
+								</div>
+							</div>
+						</a>
+					</div>
+        {% endfor %}
+      </div>
+      {{ knp_pagination_render(auteurs, '@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig') }}
+    </div>
+    
+  </div>
+
+{% endblock %}
